@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "module": "Node16",
+    "target": "ES2022",
+    "allowJs": false
+  },
+  "typeRoots": ["./node_modules/phaser/types"],
+  "types": ["Phaser"],
+  "files": ["src/index.ts"]
+}
