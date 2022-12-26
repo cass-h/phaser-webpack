@@ -1,4 +1,4 @@
-import Phaser, { Scale, ScaleModes } from 'phaser';
+import Phaser, { Scale } from 'phaser';
 import './styles.scss';
 class SceneComponent extends Phaser.Scene {
   ts: Phaser.GameObjects.TileSprite;
@@ -34,32 +34,40 @@ class SceneComponent extends Phaser.Scene {
     logo.setCollideWorldBounds(true);
 
     emitter.startFollow(logo);
+    const toggleFullscreen = () => {
+      !this.scale.isFullscreen
+        ? this.scale.startFullscreen()
+        : this.scale.stopFullscreen();
+    };
+    const FKey = this.input.keyboard.addKey('F');
+
+    FKey.on('down', toggleFullscreen, this);
   }
   update() {
     this.ts.tilePositionX = (this.ts.tilePositionX + 0.1) % this.ts.width;
   }
-  config: Phaser.Types.Core.GameConfig = {
-    type: Phaser.AUTO,
-    physics: {
-      default: 'arcade',
-      arcade: { gravity: { x: 0, y: 0 } },
-    },
-    scale: {
-      autoRound: true,
-      mode: Scale.ScaleModes.FIT,
-    },
-    scene: {
-      preload: this.preload,
-      create: this.create,
-      update: this.update,
-    },
-  };
-  constructor(inputConfig: Partial<Phaser.Types.Core.GameConfig>) {
-    super({});
-    this.config = Object.assign(this.config, inputConfig);
+
+  constructor() {
+    super('demo-scene');
   }
 }
 
 const phaserRoot = document.getElementById('phaser');
-const scene = new SceneComponent({ parent: phaserRoot });
-const game = new Phaser.Game(scene.config);
+const config: Phaser.Types.Core.GameConfig = {
+  type: Phaser.AUTO,
+  parent: phaserRoot,
+  dom: {
+    createContainer: true,
+  },
+  physics: {
+    default: 'arcade',
+    arcade: { gravity: { x: 0, y: 0 } },
+  },
+  scale: {
+    autoRound: true,
+    mode: Scale.ScaleModes.FIT,
+  },
+  scene: [SceneComponent],
+};
+
+const game = new Phaser.Game(config);
