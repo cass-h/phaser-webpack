@@ -1,5 +1,10 @@
 import Phaser, { Scale } from 'phaser';
 import './styles.scss';
+import store from './redux/store';
+import { add } from './redux/slices/lives';
+import { playerDeath, loadGame, saveGame } from './redux/actions';
+import { setName } from './redux/slices/game';
+
 class SceneComponent extends Phaser.Scene {
   ts: Phaser.GameObjects.TileSprite;
   preload() {
@@ -40,8 +45,48 @@ class SceneComponent extends Phaser.Scene {
         : this.scale.stopFullscreen();
     };
     const FKey = this.input.keyboard.addKey('F');
+    const SKey = this.input.keyboard.addKey('S');
+    const LKey = this.input.keyboard.addKey('L');
 
+    const MinusKey = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.NUMPAD_SUBTRACT
+    );
+
+    const PlusKey = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.NUMPAD_ADD
+    );
+    store.dispatch(setName('TestName'));
     FKey.on('down', toggleFullscreen, this);
+    MinusKey.on(
+      'down',
+      () => {
+        store.dispatch(playerDeath());
+      },
+      this
+    );
+
+    PlusKey.on(
+      'down',
+      () => {
+        store.dispatch(add(1));
+      },
+      this
+    );
+
+    SKey.on(
+      'down',
+      () => {
+        store.dispatch(saveGame());
+      },
+      this
+    );
+    LKey.on(
+      'down',
+      () => {
+        store.dispatch(loadGame());
+      },
+      this
+    );
   }
   update() {
     this.ts.tilePositionX = (this.ts.tilePositionX + 0.1) % this.ts.width;
