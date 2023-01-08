@@ -87,6 +87,16 @@ class SceneComponent extends Phaser.Scene {
       },
       this
     );
+
+    const gameOverText = this.add
+      .text(120, screen.height / 2, "Game Over\npress 'L' to load")
+      .setOrigin(0, 0)
+      .setFontSize(42)
+      .setVisible(false)
+      .setActive(false);
+    store.subscribe(() => {
+      gameOverText.setVisible(store.getState().game.over);
+    });
   }
   update() {
     this.ts.tilePositionX = (this.ts.tilePositionX + 0.1) % this.ts.width;
