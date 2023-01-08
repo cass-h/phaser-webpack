@@ -35,7 +35,7 @@
     "watch": "webpack --watch",
     "serve": "webpack serve",
     "lint": "npm run lint:es && npm run lint:style",
-    "lint:style": "stylelint '**/*.scss' --syntax scss && stylelint  '**/*.css' --syntax css",
+    "lint:style": "stylelint '**/*.{scss,css}'",
     "lint:es": "eslint '**/*.{ts,tsx,js,jsx}'",
     "format": "prettier --write '**/*'"
   },
